@@ -26,3 +26,5 @@ class AuthService:
             "token_type": "bearer",
         }
  
+    def list(self, limit: int):
+        return self.repo.list(limit=limit)

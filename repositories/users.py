@@ -19,3 +19,7 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(user)
         return user
+    
+    def list(self, limit: int) -> list[models.User]:
+        query = self.db.query(models.User)
+        return query.limit(limit).all()

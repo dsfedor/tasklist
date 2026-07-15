@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
- 
+
+import models 
 from database import get_db
+from dependencies import get_current_user
 from repositories.users import UserRepository
 from schemas import TokenOut, UserCreate, UserOut
 from services.auth import AuthService
@@ -34,3 +36,11 @@ def login(
 ):
     return service.authenticate(payload.email, payload.password)
  
+
+@router.get("/users", response_model=list[UserOut])
+def get_users(
+    limit: int = 10,
+    service: AuthService = Depends(get_auth_service),
+    current_user: models.User = Depends(get_current_user),
+):
+    return service.list(current_user.id, limit=limit) 
